@@ -1,0 +1,1124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Get help with products, orders, and delivery from your store's support assistant."
+    />
+    <title>Store support</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #202a25;
+        --muted: #78827b;
+        --green: #245641;
+        --green-dark: #193f30;
+        --green-pale: #edf4ee;
+        --paper: #f7f8f5;
+        --line: #e8ebe6;
+        --white: #fff;
+        --shadow: 0 18px 55px rgb(34 53 42 / 9%);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        background:
+          radial-gradient(ellipse at 12% 9%, rgb(233 239 229 / 75%), transparent 36%),
+          var(--paper);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button {
+        color: inherit;
+      }
+
+      .page {
+        width: min(1120px, calc(100% - 48px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        display: flex;
+        min-height: 82px;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgb(32 42 37 / 8%);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--ink);
+        font-size: 15px;
+        font-weight: 720;
+        letter-spacing: -0.035em;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 35px;
+        height: 35px;
+        place-items: center;
+        border-radius: 12px;
+        background: var(--green);
+        color: white;
+      }
+
+      .brand-mark svg {
+        width: 19px;
+        height: 19px;
+      }
+
+      .topbar-note,
+      .online-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .demo-badge {
+        padding: 6px 9px;
+        border: 1px solid #dfe7dd;
+        border-radius: 999px;
+        background: rgb(255 255 255 / 62%);
+        color: #647568;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.045em;
+        text-transform: uppercase;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 300px;
+        align-items: start;
+        gap: 28px;
+        padding: 54px 0 64px;
+      }
+
+      .intro {
+        margin: 4px 0 24px;
+      }
+
+      .eyebrow {
+        margin: 0 0 11px;
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 750;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(29px, 4vw, 40px);
+        font-weight: 620;
+        letter-spacing: -0.06em;
+        line-height: 1.12;
+      }
+
+      .intro-copy {
+        margin: 11px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      .chat-card {
+        display: flex;
+        min-height: 570px;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid rgb(32 42 37 / 7%);
+        border-radius: 19px;
+        background: var(--white);
+        box-shadow: var(--shadow);
+      }
+
+      .chat-header {
+        display: flex;
+        min-height: 74px;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .avatar {
+        display: grid;
+        width: 40px;
+        height: 40px;
+        flex: 0 0 auto;
+        place-items: center;
+        border-radius: 14px;
+        background: var(--green-pale);
+        color: var(--green);
+      }
+
+      .avatar svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .chat-heading {
+        min-width: 0;
+      }
+
+      .chat-heading strong {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .online-label {
+        margin-top: 4px;
+        font-size: 11px;
+      }
+
+      .online-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #54a772;
+        box-shadow: 0 0 0 3px #edf7ef;
+      }
+
+      .chat-header .demo-badge {
+        margin-left: auto;
+      }
+
+      .messages {
+        display: flex;
+        min-height: 0;
+        flex: 1;
+        flex-direction: column;
+        gap: 17px;
+        overflow-y: auto;
+        padding: 22px 21px 17px;
+        scroll-behavior: smooth;
+      }
+
+      .message {
+        display: flex;
+        max-width: 87%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .message.user {
+        align-self: flex-end;
+        align-items: flex-end;
+      }
+
+      .bubble {
+        padding: 12px 14px;
+        border: 1px solid #edf0eb;
+        border-radius: 4px 15px 15px;
+        background: #f5f7f3;
+        color: #37433b;
+        font-size: 13px;
+        line-height: 1.58;
+        overflow-wrap: anywhere;
+      }
+
+      .message.user .bubble {
+        border-color: var(--green);
+        border-radius: 15px 4px 15px 15px;
+        background: var(--green);
+        color: white;
+      }
+
+      .message-time {
+        padding: 0 3px;
+        color: #98a099;
+        font-size: 10px;
+      }
+
+      .quick-replies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        padding-left: 1px;
+      }
+
+      .quick-reply {
+        padding: 8px 11px;
+        border: 1px solid #dfe8df;
+        border-radius: 999px;
+        background: white;
+        color: var(--green);
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 650;
+        transition:
+          background 140ms ease,
+          border-color 140ms ease;
+      }
+
+      .quick-reply:hover {
+        border-color: #b6cbbb;
+        background: #f2f7f2;
+      }
+
+      .detail-card {
+        width: min(100%, 340px);
+        margin-top: 3px;
+        padding: 14px;
+        border: 1px solid #e6ebe4;
+        border-radius: 13px;
+        background: white;
+      }
+
+      .detail-overline {
+        margin: 0 0 5px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      .detail-title {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .detail-copy {
+        margin: 6px 0 0;
+        color: #647068;
+        font-size: 11px;
+        line-height: 1.55;
+      }
+
+      .tracking-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        margin-top: 13px;
+        padding: 10px;
+        border-radius: 9px;
+        background: #f4f7f3;
+      }
+
+      .tracking-row span {
+        color: #667169;
+        font-size: 10px;
+      }
+
+      .tracking-row strong {
+        font-size: 11px;
+      }
+
+      .tracking-link {
+        color: var(--green);
+        font-size: 10px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .tracking-link:hover {
+        text-decoration: underline;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 13px;
+        margin-top: 14px;
+        padding-left: 3px;
+      }
+
+      .timeline-step {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        color: #849087;
+        font-size: 11px;
+      }
+
+      .timeline-step:not(:last-child)::after {
+        position: absolute;
+        top: 14px;
+        left: 5px;
+        width: 1px;
+        height: 15px;
+        background: #dce5dc;
+        content: "";
+      }
+
+      .timeline-dot {
+        width: 11px;
+        height: 11px;
+        flex: 0 0 auto;
+        margin-top: 1px;
+        border: 2px solid #cad6cc;
+        border-radius: 50%;
+        background: white;
+      }
+
+      .timeline-step.complete {
+        color: #36443b;
+      }
+
+      .timeline-step.complete .timeline-dot {
+        border-color: #4a8660;
+        background: #4a8660;
+        box-shadow: inset 0 0 0 2px white;
+      }
+
+      .product-row {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #edf0eb;
+      }
+
+      .product-swatch {
+        display: grid;
+        width: 40px;
+        height: 40px;
+        flex: 0 0 auto;
+        place-items: center;
+        border-radius: 10px;
+        background: #e7ece3;
+        color: #61745f;
+        font-size: 16px;
+      }
+
+      .product-row strong,
+      .product-row span {
+        display: block;
+      }
+
+      .product-row strong {
+        font-size: 11px;
+      }
+
+      .product-row span {
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 10px;
+      }
+
+      .chat-form {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0 14px;
+        padding: 8px;
+        border: 1px solid #e8ebe6;
+        border-radius: 13px;
+        background: white;
+        transition: border-color 140ms ease;
+      }
+
+      .chat-form:focus-within {
+        border-color: #a7c3ad;
+      }
+
+      .chat-input {
+        width: 100%;
+        min-width: 0;
+        padding: 7px 8px;
+        border: 0;
+        outline: none;
+        background: transparent;
+        color: var(--ink);
+        font-size: 12px;
+      }
+
+      .chat-input::placeholder {
+        color: #a0a9a2;
+      }
+
+      .send-button {
+        display: grid;
+        width: 36px;
+        height: 36px;
+        flex: 0 0 auto;
+        place-items: center;
+        border: 0;
+        border-radius: 10px;
+        background: var(--green);
+        color: white;
+        cursor: pointer;
+        transition: background 140ms ease;
+      }
+
+      .send-button:hover {
+        background: var(--green-dark);
+      }
+
+      .send-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .chat-footnote {
+        margin: 9px 16px 13px;
+        color: #9aa39c;
+        font-size: 10px;
+        text-align: center;
+      }
+
+      .sidebar {
+        display: grid;
+        gap: 13px;
+        padding-top: 96px;
+      }
+
+      .side-card {
+        padding: 18px;
+        border: 1px solid rgb(32 42 37 / 7%);
+        border-radius: 15px;
+        background: rgb(255 255 255 / 80%);
+      }
+
+      .side-card h2 {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .side-card p {
+        margin: 7px 0 0;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.6;
+      }
+
+      .topic-list {
+        display: grid;
+        gap: 7px;
+        margin-top: 13px;
+      }
+
+      .topic-button {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 11px;
+        border: 1px solid #edf0eb;
+        border-radius: 9px;
+        background: white;
+        color: #435047;
+        cursor: pointer;
+        font-size: 11px;
+        text-align: left;
+        transition:
+          background 140ms ease,
+          border-color 140ms ease;
+      }
+
+      .topic-button:hover {
+        border-color: #cbd9cd;
+        background: #f7faf6;
+      }
+
+      .topic-button span:last-child {
+        color: #9aa59b;
+        font-size: 14px;
+      }
+
+      .connection-card {
+        background: #f0f5ef;
+      }
+
+      .connection-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .connection-icon {
+        display: grid;
+        width: 29px;
+        height: 29px;
+        place-items: center;
+        border-radius: 9px;
+        background: white;
+        color: var(--green);
+      }
+
+      .connection-icon svg {
+        width: 15px;
+        height: 15px;
+      }
+
+      .connection-card p {
+        margin-top: 10px;
+      }
+
+      .privacy-note {
+        padding: 0 4px;
+        color: #929b94;
+        font-size: 10px;
+        line-height: 1.55;
+      }
+
+      .footer {
+        padding: 15px 0 23px;
+        border-top: 1px solid rgb(32 42 37 / 8%);
+        color: #9aa29b;
+        font-size: 10px;
+        text-align: center;
+      }
+
+      .typing {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 40px;
+      }
+
+      .typing span {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #8d9990;
+        animation: pulse 850ms ease-in-out infinite alternate;
+      }
+
+      .typing span:nth-child(2) {
+        animation-delay: 150ms;
+      }
+
+      .typing span:nth-child(3) {
+        animation-delay: 300ms;
+      }
+
+      @keyframes pulse {
+        to {
+          opacity: 0.35;
+          transform: translateY(-2px);
+        }
+      }
+
+      @media (max-width: 780px) {
+        .layout {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 19px;
+          padding-top: 37px;
+        }
+
+        .sidebar {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          padding-top: 0;
+        }
+
+        .privacy-note {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .page {
+          width: min(100% - 28px, 460px);
+        }
+
+        .topbar {
+          min-height: 67px;
+        }
+
+        .topbar-note {
+          gap: 6px;
+          font-size: 10px;
+        }
+
+        .topbar-note .demo-badge {
+          display: none;
+        }
+
+        .layout {
+          gap: 14px;
+          padding: 30px 0 42px;
+        }
+
+        .intro {
+          margin-bottom: 18px;
+        }
+
+        .intro-copy {
+          font-size: 13px;
+        }
+
+        .chat-card {
+          min-height: min(590px, 69vh);
+          border-radius: 15px;
+        }
+
+        .chat-header {
+          padding-right: 14px;
+          padding-left: 14px;
+        }
+
+        .messages {
+          padding-right: 14px;
+          padding-left: 14px;
+        }
+
+        .sidebar {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .privacy-note {
+          grid-column: auto;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Store support home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 20s-7-4.35-7-10.1A3.9 3.9 0 0 1 12 7.8a3.9 3.9 0 0 1 7 2.1C19 15.65 12 20 12 20Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.7"
+              />
+            </svg>
+          </span>
+          Store support
+        </a>
+        <div class="topbar-note">
+          <span class="demo-badge">Demo experience</span>
+          A little help, whenever you need it
+        </div>
+      </header>
+
+      <main class="layout">
+        <section aria-labelledby="page-title">
+          <div class="intro">
+            <p class="eyebrow">Here for you</p>
+            <h1 id="page-title">How can we help?</h1>
+            <p class="intro-copy">
+              Ask us about a product, your order, or anything else. We’ll point you in the right
+              direction.
+            </p>
+          </div>
+
+          <section class="chat-card" aria-label="Customer support chat">
+            <header class="chat-header">
+              <div class="avatar" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M4.5 12.25a7.5 7.5 0 0 1 15 0v3a2.25 2.25 0 0 1-2.25 2.25H15M8.25 17.5H7a2.5 2.5 0 0 1-2.5-2.5v-2.75m4.5-1.5h.01m6 .01h.01m-6.02 3.49a4.2 4.2 0 0 0 6 0"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.6"
+                  />
+                </svg>
+              </div>
+              <div class="chat-heading">
+                <strong>Customer care</strong>
+                <span class="online-label"><span class="online-dot"></span> Here to help</span>
+              </div>
+              <span class="demo-badge">Sample data</span>
+            </header>
+
+            <div class="messages" id="messages" aria-live="polite" aria-relevant="additions">
+              <div class="message">
+                <div class="bubble">
+                  Hi there! 👋 I can help with products, order status, and delivery. What can I help
+                  you find today?
+                </div>
+                <span class="message-time">Just now</span>
+                <div class="quick-replies" aria-label="Suggested questions">
+                  <button class="quick-reply" type="button" data-message="Track my order">
+                    Track my order
+                  </button>
+                  <button class="quick-reply" type="button" data-message="Tell me about your products">
+                    Product help
+                  </button>
+                  <button class="quick-reply" type="button" data-message="What is your return policy?">
+                    Returns
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <form class="chat-form" id="chat-form">
+              <label class="sr-only" for="chat-input" style="position:absolute;left:-10000px">
+                Type your message
+              </label>
+              <input
+                class="chat-input"
+                id="chat-input"
+                name="message"
+                type="text"
+                autocomplete="off"
+                maxlength="500"
+                placeholder="Type your message..."
+                aria-label="Type your message"
+              />
+              <button class="send-button" type="submit" aria-label="Send message">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="m21 3-7.5 18-3.75-7.5L2.25 9.75 21 3Zm0 0L9.75 13.5"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.7"
+                  />
+                </svg>
+              </button>
+            </form>
+            <p class="chat-footnote">For your privacy, don’t share payment or account passwords here.</p>
+          </section>
+        </section>
+
+        <aside class="sidebar" aria-label="Support information">
+          <section class="side-card">
+            <h2>Popular topics</h2>
+            <p>A few quick places to start.</p>
+            <div class="topic-list">
+              <button class="topic-button" type="button" data-message="Track order 10482">
+                <span>Track an order</span><span aria-hidden="true">›</span>
+              </button>
+              <button class="topic-button" type="button" data-message="Tell me about the Cloud Knit Sweater">
+                <span>Product information</span><span aria-hidden="true">›</span>
+              </button>
+              <button class="topic-button" type="button" data-message="What is your return policy?">
+                <span>Returns &amp; exchanges</span><span aria-hidden="true">›</span>
+              </button>
+              <button class="topic-button" type="button" data-message="I want to talk to a person">
+                <span>Talk to a person</span><span aria-hidden="true">›</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="side-card connection-card">
+            <div class="connection-title">
+              <span class="connection-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M7.5 8.5 12 5l4.5 3.5v9h-9v-9Zm-2 0h13m-9 4.5h5m-5 3h5"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </span>
+              <h2>Store connection</h2>
+            </div>
+            <p>
+              This is a preview using sample products and orders. Connect your Shopify store to
+              answer with live information.
+            </p>
+          </section>
+
+          <p class="privacy-note">
+            This demo doesn’t access customer accounts or place orders. A live setup should verify
+            order ownership before showing private tracking details.
+          </p>
+        </aside>
+      </main>
+
+      <footer class="footer">Customer support preview · Connect Shopify for live store information</footer>
+    </div>
+
+    <script>
+      const messages = document.querySelector("#messages");
+      const form = document.querySelector("#chat-form");
+      const input = document.querySelector("#chat-input");
+
+      const sampleOrder = {
+        number: "10482",
+        status: "Out for delivery",
+        eta: "Today, by 8:00 PM",
+        carrier: "Sample carrier",
+        tracking: "DEMO-TRACK-10482",
+        trackingUrl: "https://example.com/track/DEMO-TRACK-10482",
+      };
+
+      const products = [
+        {
+          name: "Cloud Knit Sweater",
+          price: "$68",
+          description: "A soft, mid-weight layer in relaxed, true-to-size sizing.",
+          emoji: "🧶",
+        },
+        {
+          name: "Everyday Canvas Tote",
+          price: "$32",
+          description: "A durable, roomy everyday carry-all made from sturdy canvas.",
+          emoji: "👜",
+        },
+      ];
+
+      function addMessage(text, sender = "assistant", card) {
+        const message = document.createElement("div");
+        message.className = `message ${sender === "user" ? "user" : ""}`.trim();
+
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.textContent = text;
+        message.append(bubble);
+
+        const time = document.createElement("span");
+        time.className = "message-time";
+        time.textContent = "Just now";
+        message.append(time);
+
+        if (card) message.append(card);
+        messages.append(message);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function makeOrderCard() {
+        const card = document.createElement("section");
+        card.className = "detail-card";
+        card.setAttribute("aria-label", "Sample order tracking details");
+
+        const overline = document.createElement("p");
+        overline.className = "detail-overline";
+        overline.textContent = `Sample order #${sampleOrder.number}`;
+
+        const title = document.createElement("p");
+        title.className = "detail-title";
+        title.textContent = sampleOrder.status;
+
+        const copy = document.createElement("p");
+        copy.className = "detail-copy";
+        copy.textContent = `Estimated delivery: ${sampleOrder.eta}`;
+
+        const tracking = document.createElement("div");
+        tracking.className = "tracking-row";
+        const trackingLabel = document.createElement("span");
+        trackingLabel.textContent = "Tracking number";
+        const trackingNumber = document.createElement("strong");
+        trackingNumber.textContent = sampleOrder.tracking;
+        const trackingLink = document.createElement("a");
+        trackingLink.className = "tracking-link";
+        trackingLink.href = sampleOrder.trackingUrl;
+        trackingLink.target = "_blank";
+        trackingLink.rel = "noopener noreferrer";
+        trackingLink.textContent = "Open sample tracking link";
+        tracking.append(trackingLabel, trackingNumber, trackingLink);
+
+        const timeline = document.createElement("div");
+        timeline.className = "timeline";
+        [
+          ["Order placed", true],
+          ["Shipped", true],
+          ["Out for delivery", true],
+          ["Delivered", false],
+        ].forEach(([label, complete]) => {
+          const step = document.createElement("div");
+          step.className = `timeline-step${complete ? " complete" : ""}`;
+          const dot = document.createElement("span");
+          dot.className = "timeline-dot";
+          dot.setAttribute("aria-hidden", "true");
+          const stepLabel = document.createElement("span");
+          stepLabel.textContent = label;
+          step.append(dot, stepLabel);
+          timeline.append(step);
+        });
+
+        card.append(overline, title, copy, tracking, timeline);
+        return card;
+      }
+
+      function makeProductCard(product) {
+        const card = document.createElement("section");
+        card.className = "detail-card";
+        card.setAttribute("aria-label", "Sample product information");
+
+        const overline = document.createElement("p");
+        overline.className = "detail-overline";
+        overline.textContent = "Featured product · Sample";
+
+        const row = document.createElement("div");
+        row.className = "product-row";
+        const swatch = document.createElement("span");
+        swatch.className = "product-swatch";
+        swatch.setAttribute("aria-hidden", "true");
+        swatch.textContent = product.emoji;
+        const info = document.createElement("div");
+        const name = document.createElement("strong");
+        name.textContent = product.name;
+        const price = document.createElement("span");
+        price.textContent = `${product.price} · Sample price`;
+        info.append(name, price);
+        row.append(swatch, info);
+
+        const copy = document.createElement("p");
+        copy.className = "detail-copy";
+        copy.textContent = product.description;
+        card.append(overline, row, copy);
+        return card;
+      }
+
+      function getReply(message) {
+        const text = message.toLowerCase();
+        const orderMatch = text.match(/(?:#|order\s*)?(\d{4,})/);
+        const asksAboutOrder =
+          /\b(track|tracking|where is|where's|status|delivery|delivered|shipment|package)\b/.test(text) ||
+          (orderMatch && (/\border\b|#/.test(text) || /^\s*\d{4,}\s*$/.test(text)));
+
+        if (asksAboutOrder) {
+          if (orderMatch && orderMatch[1] !== sampleOrder.number) {
+            return {
+              text: `I can’t find order #${orderMatch[1]} in this demo. For live order status, this chat needs to be connected to your Shopify store.`,
+            };
+          }
+          if (!orderMatch) {
+            return {
+              text: `Sure! Please enter your order number and I’ll look it up. For this preview, try #${sampleOrder.number}.`,
+            };
+          }
+          return {
+            text: `Here’s the latest for order #${sampleOrder.number}. This is sample tracking data, not a live shipment.`,
+            card: makeOrderCard(),
+          };
+        }
+
+        if (/\b(product|sweater|knit|tote|price|size|sizing|material|fabric)\b/.test(text)) {
+          const product = /\b(tote|canvas|bag)\b/.test(text) ? products[1] : products[0];
+          return {
+            text: "Here’s an example of the kind of product information I can share. Product details and prices below are samples.",
+            card: makeProductCard(product),
+          };
+        }
+
+        if (/\b(return|refund|exchange|exchange policy)\b/.test(text)) {
+          return {
+            text: "Our sample policy accepts returns of unworn items in their original condition within 30 days of delivery. This is placeholder information—replace it with your store’s actual policy.",
+          };
+        }
+
+        if (/\b(person|human|agent|someone|support|contact|help)\b/.test(text)) {
+          return {
+            text: "I can help with common questions here. For a live handoff, connect your preferred support inbox or help desk; this preview doesn’t have a staffed support channel.",
+          };
+        }
+
+        if (/\b(hello|hi|hey|good morning|good afternoon)\b/.test(text)) {
+          return { text: "Hi! I can help with sample product information, order tracking, and store policies. What would you like to know?" };
+        }
+
+        return {
+          text: "I can help with products, order status, delivery, or returns. Try asking about the Cloud Knit Sweater, or track sample order #10482. My answers use demo data until Shopify is connected.",
+        };
+      }
+
+      async function sendMessage(text) {
+        const message = text.trim();
+        if (!message) return;
+
+        addMessage(message, "user");
+        input.value = "";
+        input.disabled = true;
+        form.querySelector("button[type='submit']").disabled = true;
+
+        const typingMessage = document.createElement("div");
+        typingMessage.className = "message";
+
+        const typingBubble = document.createElement("div");
+        typingBubble.className = "bubble typing";
+        typingBubble.textContent = "Connecting to assistant...";
+
+        typingMessage.append(typingBubble);
+        messages.append(typingMessage);
+
+        messages.scrollTop = messages.scrollHeight;
+
+        try {
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              message: message
+            })
+          });
+
+          typingMessage.remove();
+
+          let data;
+          const contentType = response.headers.get("content-type") || "";
+          if (contentType.includes("application/json")) {
+            data = await response.json();
+          } else {
+            data = {};
+          }
+
+          if (!response.ok) {
+            throw new Error(data.error || "Something went wrong");
+          }
+
+          if (!data.reply) {
+            throw new Error("The assistant returned an empty response");
+          }
+
+          addMessage(data.reply, "assistant");
+
+        } catch (error) {
+          typingMessage.remove();
+          addMessage(error.message || "Sorry, I couldn't connect to the support server. Please try again.", "assistant");
+          console.error(error);
+        } finally {
+          input.disabled = false;
+          form.querySelector("button[type='submit']").disabled = false;
+          input.focus();
+        }
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        sendMessage(input.value);
+      });
+
+      document.querySelectorAll("[data-message]").forEach((button) => {
+        button.addEventListener("click", () => sendMessage(button.dataset.message));
+      });
+    </script>
+  </body>
+</html>
